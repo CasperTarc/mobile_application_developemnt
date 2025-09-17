@@ -1,5 +1,12 @@
 // lib/main.dart
 
+// yyq I PUT THIS
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'firebase_options.dart';
+import 'dev_seed.dart';
+
+
 import 'package:flutter/material.dart';
 import 'app_colors.dart'; // Import your colors
 import 'bottom_nav_bar.dart'; // Import your nav bar
@@ -12,9 +19,30 @@ import 'enhanced_driver_profile_screen.dart'; // Enhanced profile
 import 'enhanced_job_history_screen.dart'; // Enhanced job history
 import 'delivery_schedule_single_page.dart'; // Single page delivery schedule
 
-void main() {
+// yyq I PUT THIS
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // YYQ I PUT THIS, (await seedPartRequestXYZ789(); only run this code first time, then later comment it)
+  // RUN ONCE, then remove or comment out.
+  // await seedPartRequestXYZ789();
+
+  // Sign in so Firestore rules that require auth will work
+  if (FirebaseAuth.instance.currentUser == null) {
+    await FirebaseAuth.instance.signInAnonymously();
+  }
+
   runApp(const MyApp());
 }
+
+/*void main() {
+  runApp(const MyApp());
+  }
+*/
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -449,32 +477,7 @@ class PartRequestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Inline mock data, exactly like your teammate's DeliveryJob list
-    final demoRequest = DeliveryRequest(
-      id: 'REQ-1234',
-      destination: 'Mount Austin - Johor Bahru',
-      dueDateFormatted: '25 July 2025, 3:00 PM',
-      from: 'Midvalley SouthKey - Johor Bahru',
-      status: 'READY TO PICKUP',
-      parts: [
-        PartItem(
-          name: 'Oil Filter',
-          number: 'OF-2345',
-          requestedQty: 2,
-          availableQty: 2,
-          note: 'Handle with care',
-        ),
-        PartItem(
-          name: 'Brake Pad',
-          number: 'BP-1876',
-          requestedQty: 4,
-          availableQty: 3,
-          note: 'Pick from shelf A3',
-        ),
-      ],
-    );
-
-    return EnhancedPartRequestDetailsScreen(orderId: demoRequest.id);
+    return const DeliveryRequestScreen(orderId: 'XYZ-789');
   }
 }
 
